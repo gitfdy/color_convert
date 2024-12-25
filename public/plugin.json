@@ -1,0 +1,36 @@
+{
+  "main": "index.html",
+  "preload": "preload/services.js",
+  "logo": "logo.png",
+  "development": {
+    "main": "http://localhost:5173"
+  },
+  "features": [
+    {
+      "code": "cc",
+      "explain": "可以根据输入的色值，实时进行转换，目前支持rgba,文本色值,16进制色值。如需更多功能，还请评论区留言，有问必答。",
+      "cmds": [
+        "cc",
+        {
+          "type": "text",
+          "label": "色值转换"
+        },
+        "color convert",
+        {
+          "type": "text",
+          "label": "色值转换"
+        },
+        "颜色转换",
+        {
+          "type": "text",
+          "label": "色值转换"
+        },
+        "色值转换",
+        {
+          "type": "text",
+          "label": "色值转换"
+        }
+      ]
+    }
+  ]
+}
