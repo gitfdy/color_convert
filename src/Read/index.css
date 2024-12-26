@@ -3,6 +3,9 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100vh;
+    background: #4C4C4D;
+
 }
 
 .content {
@@ -11,9 +14,11 @@
     align-items: center;
     width: 99%;
     flex-direction: row;
-    background: #003f7f;
-    height: 470px;
     padding: 5px;
+}
+
+.content h3 {
+    color: #fff;
 }
 
 .right {
@@ -23,12 +28,9 @@
     flex-direction: column;
     align-items: center;
     font-family: Arial, sans-serif;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 30%;
     margin: 0 auto;
-    background: #333;
-    height: 470px;
+    height: 475px;
 }
 
 .left {
@@ -38,8 +40,6 @@
     flex-direction: column;
     align-items: center;
     font-family: Arial, sans-serif;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 70%;
     margin: 0 auto;
 }
@@ -57,12 +57,14 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    background: #E0E0CE;
 }
+
 
 .left div {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #7c7c7c;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
@@ -131,10 +133,12 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    font-size: 15px !important;
+    color: #fff;
 }
 
 .color-result span {
-    color: #e6cc1c;
+    color: #F2AF29;
     margin-right: 10px;
 }
 
@@ -142,14 +146,14 @@
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #D1603D;
     color: #fff;
     cursor: pointer;
     font-size: 14px;
 }
 
 .color-result button:hover {
-    background-color: #0056b3;
+    background-color: #ff8960;
 }
 
 .toast {
@@ -177,42 +181,18 @@
     height: 20px;
 }
 
-.handleInput textarea {
+.handleInput input {
     border-width: 0;
-    background: rgba(85, 85, 85, 0.2) !important;
-    color: #fff;
+    background: #E0E0CE !important;
     height: 15px !important;
-    font-size: 15px;
+    font-size: 14px;
+    opacity: 1;
 }
 
 .marginRight {
     margin-right: 15px;
 }
 
-@media (prefers-color-scheme: dark) {
-    .left {
-        background-color: #333;
-        color: #fff;
-    }
-
-    .left input {
-        background-color: #555;
-        border: 1px solid #444;
-        color: #fff;
-    }
-
-    .left div {
-        border: 1px solid #555;
-    }
-
-    .left button {
-        background-color: #0056b3;
-    }
-
-    .left button:hover {
-        background-color: #003f7f;
-    }
-}
 
 .history-list {
     width: 100%;
@@ -222,16 +202,17 @@
 
 /* 调整滚动条样式 */
 .history-list::-webkit-scrollbar {
-    width: 2px; /* 设置滚动条宽度为2px */
+    width: 4px; /* 设置滚动条宽度为2px */
+    background: #007bff;
 }
 
 .history-list::-webkit-scrollbar-thumb {
-    background-color: #888; /* 设置滚动条颜色 */
+    background-color: #F2AF29; /* 设置滚动条颜色 */
     border-radius: 10px; /* 设置滚动条圆角 */
 }
 
 .history-list::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* 设置滚动条悬停颜色 */
+    background-color: #444; /* 设置滚动条悬停颜色 */
 }
 
 .right ul {
@@ -239,31 +220,24 @@
     padding: 0;
     margin: 0;
     width: 100%;
+
 }
 
 .right li {
     padding: 10px;
     margin-bottom: 10px;
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    border: 1px solid #7c7c7c;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-right: 9px;
+    color: #ffffff;
 }
 
 .right li:hover {
     background-color: #e6e6e6;
 }
 
-@media (prefers-color-scheme: dark) {
-    .right li {
-        background-color: #444;
-        border: 1px solid #555;
-    }
-
-    .right li:hover {
-        background-color: #878787;
-    }
-}

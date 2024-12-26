@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import './index.css'
 
@@ -16,6 +16,7 @@ export default function Read () {
   const [flutterColor, setFlutterColor] = useState('')
   const [rgbColor, setRgbColor] = useState('')
   const [historyList, setHistoryList] = useState(utools.dbStorage.getItem('history_list') || [])
+  const historyListRef = useRef(null)
   
   useEffect(() => {
     if (color) {
@@ -59,13 +60,16 @@ export default function Read () {
     if (_isValidateColor(color)) {
       let list = utools.dbStorage.getItem('history_list') || []
       if (!list.includes(color)) {
-        if (list.length >= 7) {
+        if (list.length >= 20) {
           list.shift()
         }
         list.push(color)
+        utools.dbStorage.setItem('history_list', list)
+        setHistoryList(list)
+        historyListRef.current.scrollTo({
+          top: 0, behavior: 'smooth' // 平滑滚动
+        })
       }
-      utools.dbStorage.setItem('history_list', list)
-      setHistoryList(list)
     }
   }
   
@@ -150,7 +154,6 @@ export default function Read () {
   }
   
   return (<div className="container">
-    <h1>色值转换</h1>
     <div className="content">
       <div className="left">
         <h3>输入颜色</h3>
@@ -198,14 +201,14 @@ export default function Read () {
       </div>
       <div className="right">
         <h3>转换记录</h3>
-        <div className="history-list">
+        <div className="history-list" ref={historyListRef}>
           <ul>
             {historyList.slice().reverse().map((item, index) => {
-              const opacity = 1 - (index / historyList.length * 0.9) // 计算透明度
+              const opacity = 1 - (index / historyList.length * 0.99) // 计算透明度
               return (<li
                 key={index}
                 onClick={() => setColor(item)}
-                style={{ backgroundColor: `rgba(85, 85, 85, ${opacity})` }} // 设置背景色
+                style={{ backgroundColor: `rgba(242, 175, 41, ${opacity})` }} // 设置背景色
               >
                 {item}
               </li>)
@@ -214,6 +217,6 @@ export default function Read () {
         </div>
       </div>
     </div>
-    <Toaster position="top-right"/>
+    <Toaster position="bottom-right"/>
   </div>)
 }
