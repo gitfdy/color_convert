@@ -12,7 +12,7 @@
     width: 99%;
     flex-direction: row;
     background: #003f7f;
-    height: 430px;
+    height: 470px;
     padding: 5px;
 }
 
@@ -28,7 +28,7 @@
     width: 30%;
     margin: 0 auto;
     background: #333;
-    height: 435px;
+    height: 470px;
 }
 
 .left {
@@ -170,6 +170,23 @@
 
 .toast.show {
     opacity: 1;
+}
+
+.handleInput {
+    border-width: 0 !important;
+    height: 20px;
+}
+
+.handleInput textarea {
+    border-width: 0;
+    background: rgba(85, 85, 85, 0.2) !important;
+    color: #fff;
+    height: 15px !important;
+    font-size: 15px;
+}
+
+.marginRight {
+    margin-right: 15px;
 }
 
 @media (prefers-color-scheme: dark) {

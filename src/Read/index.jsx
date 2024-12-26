@@ -10,6 +10,8 @@ const notify = () => toast('Copy success', {
 
 export default function Read () {
   const [color, setColor] = useState('')
+  const [prefix, setPrefix] = useState('')
+  const [suffix, setSuffix] = useState('')
   const [hexColor, setHexColor] = useState('')
   const [flutterColor, setFlutterColor] = useState('')
   const [rgbColor, setRgbColor] = useState('')
@@ -32,13 +34,22 @@ export default function Read () {
     setColor(formatInput(e.target.value))
   }
   
+  const handlePrefix = (e) => {
+    setPrefix(e.target.value)
+  }
+  
+  const handleSuffix = (e) => {
+    setSuffix(e.target.value)
+  }
+  
   const handleClear = () => {
     clearColors()
     setColor('')
   }
   
   const handleCopy = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
+    const _copyText = prefix + text + suffix
+    navigator.clipboard.writeText(_copyText).then(() => {
       notify()
       setTimeout(saveConvertHistory, 500)
     })
@@ -155,17 +166,32 @@ export default function Read () {
               onChange={handleChange}
             />
             <span className="clear-icon" onClick={handleClear}>&times;</span>
+            <div className="handleInput">
+              <input
+                type="text"
+                placeholder={'输入前缀，默认为空'}
+                value={prefix}
+                className="marginRight"
+                onChange={handlePrefix}
+              />
+              <input
+                type="text"
+                placeholder={'输入后缀，默认为空'}
+                value={suffix}
+                onChange={handleSuffix}
+              />
+            </div>
           </div>
           <div onClick={() => handleCopy(rgbColor)} className="color-result">
-            转换后的RGB色值: <span>{rgbColor}</span>
+            转换后的RGB色值: <span>{rgbColor ? (prefix + rgbColor + suffix) : ''}</span>
             <button>复制</button>
           </div>
           <div onClick={() => handleCopy(hexColor)} className="color-result">
-            转换后的16进制色值: <span>{hexColor}</span>
+            转换后的16进制色值: <span>{hexColor ? (prefix + hexColor + suffix) : ''}</span>
             <button>复制</button>
           </div>
           <div onClick={() => handleCopy(flutterColor)} className="color-result">
-            转换后的Flutter色值: <span>{flutterColor}</span>
+            转换后的Flutter色值: <span>{flutterColor ? (prefix + flutterColor + suffix) : ''}</span>
             <button>复制</button>
           </div>
         </div>
@@ -176,7 +202,6 @@ export default function Read () {
           <ul>
             {historyList.slice().reverse().map((item, index) => {
               const opacity = 1 - (index / historyList.length * 0.9) // 计算透明度
-              console.log(opacity)
               return (<li
                 key={index}
                 onClick={() => setColor(item)}
@@ -184,7 +209,8 @@ export default function Read () {
               >
                 {item}
               </li>)
-            })}          </ul>
+            })}
+          </ul>
         </div>
       </div>
     </div>
