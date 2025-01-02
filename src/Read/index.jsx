@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import './index.css'
+import {
+  SliderPicker
+} from 'react-color'
 
 const notify = () => toast('Copy success', {
   icon: '🎉', style: {
@@ -10,6 +13,7 @@ const notify = () => toast('Copy success', {
 
 export default function Read () {
   const [color, setColor] = useState('')
+  const [showColorPicker, setShowColorPicker] = useState(false)
   const [prefix, setPrefix] = useState('')
   const [suffix, setSuffix] = useState('')
   const [hexColor, setHexColor] = useState('')
@@ -17,7 +21,8 @@ export default function Read () {
   const [rgbColor, setRgbColor] = useState('')
   const [historyList, setHistoryList] = useState(utools.dbStorage.getItem('history_list') || [])
   const historyListRef = useRef(null)
-  
+  const colorPickerRef = useRef(null)
+  const hideTimeoutRef = useRef(null)
   useEffect(() => {
     if (color) {
       const rgb = convertColorToRgb(color)
@@ -28,6 +33,14 @@ export default function Read () {
       }
     } else {
       clearColors()
+    }
+    
+    if (showColorPicker) {
+      clearTimeout(hideTimeoutRef.current)
+      hideTimeoutRef.current = setTimeout(() => {
+        colorPickerRef.current.classList.add('fade-out')
+        setTimeout(() => setShowColorPicker(false), 500)
+      }, 3000)
     }
   }, [color])
   
@@ -157,45 +170,85 @@ export default function Read () {
     <div className="content">
       <div className="left">
         <h3>输入颜色</h3>
+        <div className="current-color" style={{
+          backgroundColor: rgbColor || 'transparent',
+          boxShadow: '0 0 10px 5px rgba(0, 123, 255, 0.5)',
+          animation: 'glow 2s infinite'
+        }} onClick={() => setShowColorPicker(!showColorPicker)}/>
+        {showColorPicker && (<SliderPicker
+            className="sketch-picker-position"
+            color={color}
+            onChangeComplete={(newColor) => setColor(newColor.hex)}
+          />)}
         <div className="left-content">
-          <div className="input-container">
-            <label htmlFor="textInput">输入色值 (例如: red, rgba(255, 0, 0, 0.5) 或 rgb(255, 0, 0) 或 #ff0000)</label>
-            <input
-              id="textInput"
-              size="32"
-              type="text"
-              value={color}
-              autoFocus={true}
-              onChange={handleChange}
-            />
-            <span className="clear-icon" onClick={handleClear}>&times;</span>
-            <div className="handleInput">
-              <input
-                type="text"
-                placeholder={'输入前缀，默认为空'}
-                value={prefix}
-                className="marginRight"
-                onChange={handlePrefix}
-              />
-              <input
-                type="text"
-                placeholder={'输入后缀，默认为空'}
-                value={suffix}
-                onChange={handleSuffix}
-              />
+          <div className="input-section">
+            <div className="input-container">
+              <label htmlFor="textInput">输入色值</label>
+              <div className="main-input-wrapper">
+                <input
+                  id="textInput"
+                  size="32"
+                  type="text"
+                  value={color}
+                  autoFocus={true}
+                  onChange={handleChange}
+                  placeholder="支持: red, rgb(255,10,20), #ff0000"
+                />
+                <span className="clear-icon" onClick={handleClear}>&times;</span>
+              </div>
+            </div>
+            <div className="prefix-suffix-container">
+              <div className="input-container">
+                <label>前缀</label>
+                <input
+                  type="text"
+                  placeholder="输入前缀"
+                  value={prefix}
+                  onChange={handlePrefix}
+                />
+              </div>
+              <div className="input-container">
+                <label>后缀</label>
+                <input
+                  type="text"
+                  placeholder="输入后缀"
+                  value={suffix}
+                  onChange={handleSuffix}
+                />
+              </div>
             </div>
           </div>
-          <div onClick={() => handleCopy(rgbColor)} className="color-result">
-            转换后的RGB色值: <span>{rgbColor ? (prefix + rgbColor + suffix) : ''}</span>
-            <button>复制</button>
-          </div>
-          <div onClick={() => handleCopy(hexColor)} className="color-result">
-            转换后的16进制色值: <span>{hexColor ? (prefix + hexColor + suffix) : ''}</span>
-            <button>复制</button>
-          </div>
-          <div onClick={() => handleCopy(flutterColor)} className="color-result">
-            转换后的Flutter色值: <span>{flutterColor ? (prefix + flutterColor + suffix) : ''}</span>
-            <button>复制</button>
+          
+          <div className="results-section">
+            <div onClick={() => handleCopy(rgbColor)} className="color-result">
+              <div className="result-content">
+                <div className="text-container">
+                  <label>RGB色值</label>
+                  <span>{rgbColor ? (prefix + rgbColor + suffix) : '-'}</span>
+                </div>
+              </div>
+              <button>复制</button>
+            </div>
+            
+            <div onClick={() => handleCopy(hexColor)} className="color-result">
+              <div className="result-content">
+                <div className="text-container">
+                  <label>16进制色值</label>
+                  <span>{hexColor ? (prefix + hexColor + suffix) : '-'}</span>
+                </div>
+              </div>
+              <button>复制</button>
+            </div>
+            
+            <div onClick={() => handleCopy(flutterColor)} className="color-result">
+              <div className="result-content">
+                <div className="text-container">
+                  <label>Flutter色值</label>
+                  <span>{flutterColor ? (prefix + flutterColor + suffix) : '-'}</span>
+                </div>
+              </div>
+              <button>复制</button>
+            </div>
           </div>
         </div>
       </div>
@@ -203,16 +256,18 @@ export default function Read () {
         <h3>转换记录</h3>
         <div className="history-list" ref={historyListRef}>
           <ul>
-            {historyList.slice().reverse().map((item, index) => {
-              const opacity = 1 - (index / historyList.length * 0.99) // 计算透明度
-              return (<li
-                key={index}
-                onClick={() => setColor(item)}
-                style={{ backgroundColor: `rgba(242, 175, 41, ${opacity})` }} // 设置背景色
-              >
-                {item}
-              </li>)
-            })}
+            {historyList.slice().reverse().map((item, index) => (<li
+              key={index}
+              onClick={() => setColor(item)}
+            >
+              <div
+                className="color-preview"
+                style={{ backgroundColor: item }}  // 直接使用颜色值
+              />
+              <div className="text-container">
+                <span>{item}</span>
+              </div>
+            </li>))}
           </ul>
         </div>
       </div>
