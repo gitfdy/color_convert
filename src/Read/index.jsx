@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import './index.css'
 import {
-  SliderPicker
+  SliderPicker, CompactPicker, HuePicker
 } from 'react-color'
 
 const notify = () => toast('Copy success', {
@@ -169,21 +169,21 @@ export default function Read () {
   return (<div className="container">
     <div className="content">
       <div className="left">
-        <h3>输入颜色</h3>
-        <div className="current-color" style={{
-          backgroundColor: rgbColor || 'transparent',
-          boxShadow: '0 0 10px 5px rgba(0, 123, 255, 0.5)',
-          animation: 'glow 2s infinite'
-        }} onClick={() => setShowColorPicker(!showColorPicker)}/>
-        {showColorPicker && (<SliderPicker
+        
+        <div className="left-content">
+          <div className="current-color" style={{
+            backgroundColor: rgbColor || 'transparent',
+            boxShadow: '0 0 10px 5px rgba(0, 123, 255, 0.5)',
+            animation: 'glow 2s infinite'
+          }}/>
+          <SliderPicker
             className="sketch-picker-position"
             color={color}
             onChangeComplete={(newColor) => setColor(newColor.hex)}
-          />)}
-        <div className="left-content">
+          />
           <div className="input-section">
             <div className="input-container">
-              <label htmlFor="textInput">输入色值</label>
+              <label htmlFor="textInput">输入色值（Input color value）</label>
               <div className="main-input-wrapper">
                 <input
                   id="textInput"
@@ -192,14 +192,14 @@ export default function Read () {
                   value={color}
                   autoFocus={true}
                   onChange={handleChange}
-                  placeholder="支持: red, rgb(255,10,20), #ff0000"
+                  placeholder="for example : red, rgb(255,10,20), #ff0000"
                 />
                 <span className="clear-icon" onClick={handleClear}>&times;</span>
               </div>
             </div>
             <div className="prefix-suffix-container">
               <div className="input-container">
-                <label>前缀</label>
+                <label>前缀（Prefix）</label>
                 <input
                   type="text"
                   placeholder="输入前缀"
@@ -208,7 +208,7 @@ export default function Read () {
                 />
               </div>
               <div className="input-container">
-                <label>后缀</label>
+                <label>后缀（Suffix）</label>
                 <input
                   type="text"
                   placeholder="输入后缀"
@@ -223,7 +223,7 @@ export default function Read () {
             <div onClick={() => handleCopy(rgbColor)} className="color-result">
               <div className="result-content">
                 <div className="text-container">
-                  <label>RGB色值</label>
+                  <label>RGB色值（RGB color value）</label>
                   <span>{rgbColor ? (prefix + rgbColor + suffix) : '-'}</span>
                 </div>
               </div>
@@ -233,7 +233,7 @@ export default function Read () {
             <div onClick={() => handleCopy(hexColor)} className="color-result">
               <div className="result-content">
                 <div className="text-container">
-                  <label>16进制色值</label>
+                  <label>16进制色值（Hexadecimal color value）</label>
                   <span>{hexColor ? (prefix + hexColor + suffix) : '-'}</span>
                 </div>
               </div>
@@ -243,7 +243,7 @@ export default function Read () {
             <div onClick={() => handleCopy(flutterColor)} className="color-result">
               <div className="result-content">
                 <div className="text-container">
-                  <label>Flutter色值</label>
+                  <label>Flutter色值（Color value in Flutter）</label>
                   <span>{flutterColor ? (prefix + flutterColor + suffix) : '-'}</span>
                 </div>
               </div>
@@ -253,9 +253,8 @@ export default function Read () {
         </div>
       </div>
       <div className="right">
-        <h3>转换记录</h3>
         <div className="history-list" ref={historyListRef}>
-          <ul>
+          {historyList.length > 0 ? <ul>
             {historyList.slice().reverse().map((item, index) => (<li
               key={index}
               onClick={() => setColor(item)}
@@ -268,7 +267,7 @@ export default function Read () {
                 <span>{item}</span>
               </div>
             </li>))}
-          </ul>
+          </ul> : <div className="empty">The historical records are empty 🎨</div>}
         </div>
       </div>
     </div>
