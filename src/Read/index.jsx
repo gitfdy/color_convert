@@ -65,7 +65,7 @@ export default function Read () {
     const _copyText = prefix + text + suffix
     navigator.clipboard.writeText(_copyText).then(() => {
       notify()
-      setTimeout(saveConvertHistory, 700)
+      setTimeout(saveConvertHistory, 300)
     })
   }
   
